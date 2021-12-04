@@ -5,7 +5,8 @@ from portscaner.application_protocol_identification import \
     get_application_protocol_by_response
 from portscaner.application_protocols import ApplicationProtocols
 from portscaner.protocols_probes import APPLICATION_PROTOCOL_PROBES
-from portscaner.socket_extensions import tcp_send_recv, udp_send_recv
+from portscaner.transport_protocols_transfers import \
+    tcp_send_recv, udp_send_recv
 from portscaner.transport_protocols import TransportProtocols
 
 

@@ -7,8 +7,8 @@ from portscaner.application_protocols import ApplicationProtocols
 from portscaner.service_application_protocol_detection import \
     get_service_application_protocol
 from portscaner.transport_protocols import TransportProtocols
-from portscaner.transport_protocols_packet_managing import \
-    send_tcp_syn_and_recv_ack, send_tcp_rst
+from portscaner.transport_protocols_transfers import \
+    tcp_send_syn_and_recv_ack, tcp_send_rst
 
 
 class PortScaner:
@@ -28,11 +28,11 @@ class PortScaner:
         execution_time = 0
         if transport_protocol.value == TransportProtocols.TCP.value:
             start_time = pc()
-            ack_packet = send_tcp_syn_and_recv_ack(self.domain, port,
+            ack_packet = tcp_send_syn_and_recv_ack(self.domain, port,
                                                    self.timeout)
             end_time = pc()
             execution_time = end_time - start_time
-            send_tcp_rst(self.domain, port, self.timeout)
+            tcp_send_rst(self.domain, port, self.timeout)
             if not ack_packet or ack_packet.haslayer(ICMP) or \
                     not ack_packet.haslayer(TCP) or \
                     ack_packet.getlayer(TCP).flags != "SA":
@@ -59,7 +59,7 @@ class PortScaner:
         str_time_in_milliseconds = f'{int(execution_time * 1000)},ms'
         str_application_protocol = application_protocol.value \
             if application_protocol.value != \
-               application_protocol.UNKNOWN.value else '-'
+            application_protocol.UNKNOWN.value else '-'
         if self.show_app_protocols and self.verbose and \
                 transport_protocol == TransportProtocols.TCP:
             print(("{:<1} " * 4).format(transport_protocol.value, port,
