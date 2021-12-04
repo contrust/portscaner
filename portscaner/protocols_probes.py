@@ -1,22 +1,27 @@
-from application_protocols import ApplicationProtocols
-from transport_protocols import TransportProtocols
+from portscaner.application_protocols import ApplicationProtocols
+from portscaner.transport_protocols import TransportProtocols
 
 _UDP_APPLICATION_PROTOCOL_PROBES = {
-    ApplicationProtocols.HTTP.value: [b"GET / HTTP/1.1"],
+    ApplicationProtocols.HTTP.value: [],
     ApplicationProtocols.DNS.value: [
-        b"\xbb\xe7\x01\x00\x00\x01\x00\x00\x00\x00\x00\x01\x06\x67\x69\x74"
-        b"\x68\x75\x62\x03\x63\x6f\x6d\x00\x00\x01\x00\x01\x00\x00\x29\x02"
-        b"\x00\x00\x00\x00\x00\x00\x00"],
-    ApplicationProtocols.ECHO.value: [b"echo hello"]
+        b"\x50\x74\x01\x00\x00"
+        b"\x01\x00\x00\x00\x00\x00\x00"
+        b"\x06\x67\x6f\x6f\x67\x6c\x65"
+        b"\x03\x63\x6f\x6d\x00\x00\x01\x00\x01"],
+    ApplicationProtocols.ECHO.value: [b"echo hello"],
+    ApplicationProtocols.SSH.value: [],
+    ApplicationProtocols.UNKNOWN.value: []
 }
 
 _TCP_APPLICATION_PROTOCOL_PROBES = {
-    ApplicationProtocols.HTTP.value: [b"wrong request to get bad response"],
+    ApplicationProtocols.HTTP.value: [b"GET / HTTP/1.1\r\n\r\n"],
     ApplicationProtocols.DNS.value: [b"\x00\x1c\x50\x74\x01\x00\x00"
-                               b"\x01\x00\x00\x00\x00\x00\x00"
-                               b"\x06\x67\x6f\x6f\x67\x6c\x65"
-                               b"\x03\x63\x6f\x6d\x00\x00\x01\x00\x01"],
-    ApplicationProtocols.ECHO.value: [b"echo hello"]
+                                     b"\x01\x00\x00\x00\x00\x00\x00"
+                                     b"\x06\x67\x6f\x6f\x67\x6c\x65"
+                                     b"\x03\x63\x6f\x6d\x00\x00\x01\x00\x01"],
+    ApplicationProtocols.ECHO.value: [b"echo hello"],
+    ApplicationProtocols.SSH.value: [],
+    ApplicationProtocols.UNKNOWN.value: []
 }
 
 APPLICATION_PROTOCOL_PROBES = {
