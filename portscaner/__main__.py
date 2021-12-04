@@ -4,6 +4,8 @@ import socket
 
 from portscaner.scaner import PortScaner
 from portscaner.transport_protocols import TransportProtocols
+from functools import partial
+import ipaddress
 
 
 def parse_terminal_arguments():
@@ -13,14 +15,14 @@ def parse_terminal_arguments():
                     "TCP port is considered open "
                     "if it sends syn-ack packet when gets syn packet. "
                     "UDP port is considered open "
-                    "if it sends any packets when gets some probes.")
+                    "if it sends any packets when gets some probe packets.")
     parser.add_argument(
-        'address',
-        type=str,
-        help='ip address or domain for scanning')
+        'ip_address',
+        type=string_ipv4_address,
+        help='ipv4 address for scanning')
     parser.add_argument(
         '--timeout',
-        type=float,
+        type=partial(positive_number, number_type=float),
         metavar='time_in_seconds',
         default=2,
         help='response timeout in seconds, 2 seconds by default'
@@ -28,7 +30,7 @@ def parse_terminal_arguments():
     parser.add_argument(
         '-j',
         '--num-threads',
-        type=int,
+        type=partial(positive_number, number_type=int),
         metavar='max_threads',
         default=os.cpu_count(),
         help='maximum number of threads, cpu count by default'
@@ -52,6 +54,26 @@ def parse_terminal_arguments():
         help="ports for scanning in format [{tcp|udp}[/[PORT|PORT-PORT],...]]"
     )
     return parser.parse_args()
+
+
+def string_ipv4_address(string):
+    try:
+        ipaddress.IPv4Network(string)
+        return string
+    except ipaddress.AddressValueError:
+        raise argparse.ArgumentTypeError(f"{string} is not an ipv4 address.")
+
+
+def positive_number(string, number_type):
+    try:
+        number = number_type(string)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            f'Can not cast {string} to {number_type}.')
+    if number > 0:
+        return number
+    else:
+        raise argparse.ArgumentTypeError(f"{string} is not positive number.")
 
 
 def parse_ports(string):
