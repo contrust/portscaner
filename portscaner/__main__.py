@@ -3,7 +3,8 @@ from portscaner.scaner import PortScaner
 from portscaner.terminal_arguments_parsing import parse_terminal_arguments
 
 
-def main(args_dict):
+def main():
+    args_dict = vars(parse_terminal_arguments())
     domain = args_dict['ip_address']
     timeout = args_dict['timeout']
     max_threads = args_dict['num_threads']
@@ -24,5 +25,4 @@ def main(args_dict):
 
 
 if __name__ == '__main__':
-    arguments_dict = vars(parse_terminal_arguments())
-    main(arguments_dict)
+    main()
