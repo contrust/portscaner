@@ -33,8 +33,7 @@ class PortScaner:
             end_time = pc()
             execution_time = end_time - start_time
             tcp_send_rst(self.domain, port, self.timeout)
-            if not ack_packet or ack_packet.haslayer(ICMP) or \
-                    not ack_packet.haslayer(TCP) or \
+            if not ack_packet or not ack_packet.haslayer(TCP) or \
                     ack_packet.getlayer(TCP).flags != "SA":
                 return
         application_protocol = \
