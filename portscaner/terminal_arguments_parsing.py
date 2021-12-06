@@ -19,11 +19,10 @@ def parse_terminal_arguments():
         type=_string_ipv4_address,
         help='ipv4 address for scanning')
     parser.add_argument(
-        '--timeout',
-        type=partial(_positive_number, number_type=float),
-        metavar='time_in_seconds',
-        default=2,
-        help='response timeout in seconds, 2 seconds by default'
+        'ports',
+        nargs='*',
+        type=_parse_ports,
+        help="ports for scanning in format [{tcp|udp}[/[PORT|PORT-PORT],...]]"
     )
     parser.add_argument(
         '-j',
@@ -34,10 +33,11 @@ def parse_terminal_arguments():
         help='maximum number of threads, cpu count by default'
     )
     parser.add_argument(
-        '-v',
-        '--verbose',
-        action='store_true',
-        help='show time of getting packets from ports'
+        '--timeout',
+        type=partial(_positive_number, number_type=float),
+        metavar='time_in_seconds',
+        default=2,
+        help='response timeout in seconds, 2 seconds by default'
     )
     parser.add_argument(
         '-g',
@@ -46,10 +46,10 @@ def parse_terminal_arguments():
         help='show application protocols of services on ports'
     )
     parser.add_argument(
-        'ports',
-        nargs='*',
-        type=_parse_ports,
-        help="ports for scanning in format [{tcp|udp}[/[PORT|PORT-PORT],...]]"
+        '-v',
+        '--verbose',
+        action='store_true',
+        help='show time of getting packets from ports'
     )
     return parser.parse_args()
 
