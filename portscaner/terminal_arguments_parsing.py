@@ -36,8 +36,8 @@ def parse_terminal_arguments():
         '--timeout',
         type=partial(_positive_number, number_type=float),
         metavar='time_in_seconds',
-        default=2,
-        help='response timeout in seconds, 2 seconds by default'
+        default=1,
+        help='response timeout in seconds, 1 seconds by default'
     )
     parser.add_argument(
         '-g',
