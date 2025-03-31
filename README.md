@@ -31,6 +31,20 @@ sudo python3 -m portscaner [OPTIONS] IP_ADDRESS [{tcp|udp}[/[PORT|PORT-PORT],...
 | -g  | Show guessed protocol used on a port |
 | -v | Show port response time |
 
+## Examples
+
+### TCP range scan
+
+```sh
+sudo python3.10 -m portscaner -g -j 100 google.com tcp/1-1000
+```
+
+```sh
+TCP 80 HTTP 
+TCP 443 - 
+```
+
+
 ## Author
 
 **Artyom Borisov**
