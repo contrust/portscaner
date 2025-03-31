@@ -84,6 +84,29 @@ sudo python3.10 -m portscaner -g -j 100 --timeout 0.5 ntp1.net.berkeley.edu udp/
 UDP 123 SNTP 
 ```
 
+### TCP POP3 example
+
+```sh
+sudo python3.10 -m portscaner -g -j 100 --timeout 0.5 mail.comcast.net tcp/1-1000
+```
+
+```sh
+TCP 995 - 
+TCP 993 - 
+TCP 143 - 
+TCP 110 POP3 
+```
+
+### TCP SMTP example
+```sh
+sudo python3.10 -m portscaner -g -j 100 --timeout 0.5 smtp.comcast.net tcp/1-1000
+```
+
+```sh
+TCP 465 - 
+TCP 25 - 
+TCP 587 SMTP 
+```
 
 ## Author
 
