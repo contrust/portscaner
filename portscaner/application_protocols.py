@@ -6,4 +6,7 @@ class ApplicationProtocols(Enum):
     DNS = 'DNS'
     ECHO = 'ECHO'
     SSH = 'SSH'
+    SMTP = 'SMTP'
+    POP3 = 'POP3'
+    SNTP = 'SNTP'
     UNKNOWN = 'UNKNOWN'

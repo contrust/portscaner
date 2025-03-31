@@ -15,9 +15,9 @@ def parse_terminal_arguments():
                     "UDP port is considered open "
                     "if it sends any packets when gets some probe packets.")
     parser.add_argument(
-        'ip_address',
-        type=_string_ipv4_address,
-        help='ipv4 address for scanning')
+        'address',
+        type=str,
+        help='address for scanning')
     parser.add_argument(
         'ports',
         nargs='*',
