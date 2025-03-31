@@ -53,7 +53,7 @@ sudo python3.10 -m portscaner -g -j 1 google.com tcp/80
 TCP 80 HTTP 
 ```
 
-## TCP multiple specific ports scan
+### TCP multiple specific ports scan
 
 ```sh
 sudo python3.10 -m portscaner -g -j 1 google.com tcp/80,443
