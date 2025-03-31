@@ -44,6 +44,14 @@ TCP 80 HTTP
 TCP 443 - 
 ```
 
+### TCP specific port scan
+```sh
+sudo python3.10 -m portscaner -g -j 1 google.com tcp/80 
+```
+
+```sh
+TCP 80 HTTP 
+```
 
 ## Author
 
