@@ -23,7 +23,7 @@ sudo python3 -m portscaner [OPTIONS] IP_ADDRESS [{tcp|udp}[/[PORT|PORT-PORT],...
 
 ## Options
 
-| Command | Description |
+| Option | Description |
 | --- | --- |
 | -h | Show help message |
 | -j n | Use n threads for the thread pool |
