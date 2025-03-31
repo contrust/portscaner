@@ -17,9 +17,9 @@ sudo python3 -m portscaner [OPTIONS] IP_ADDRESS [{tcp|udp}[/[PORT|PORT-PORT],...
 
 ## Features
 
-* UDP scanning by sending some packets of application protocols
+* UDP scanning by sending some testing packets that can trigger a response
 * TCP scanning by sending TCP SYN with scapy module
-* Multithreading implementation with ThreadPool
+* Multithreading implementation with a thread pool
 * Some popular application protocols detection
 
 ## Options
