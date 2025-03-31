@@ -64,6 +64,18 @@ TCP 80 HTTP
 TCP 443 - 
 ```
 
+### UDP DNS example
+
+```sh
+sudo python3.10 -m portscaner -g -j 100 8.8.8.8 udp/1-1000
+```
+
+```sh
+UDP 53 DNS 
+UDP 443 - 
+```
+
+
 ## Author
 
 **Artyom Borisov**
