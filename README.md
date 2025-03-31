@@ -107,6 +107,16 @@ TCP 465 -
 TCP 25 - 
 TCP 587 SMTP 
 ```
+### TCP SSH example
+```sh
+sudo python3.10 -m portscaner -g -j 100 --timeout 0.5 umt.imm.uran.ru tcp/1-1000
+```
+
+```sh
+TCP 443 HTTP 
+TCP 22 SSH 
+TCP 80 HTTP 
+```
 
 ## Author
 
