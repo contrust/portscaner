@@ -1,5 +1,9 @@
 # portscaner
 
+## Warning
+
+The scapy module requires root privileges to bypass the OS's standard networking stack.
+
 ## Install
 
 ```sh
@@ -7,10 +11,6 @@ sudo pip install .
 ```
 
 ## Usage
-```sh
-sudo portscan [OPTIONS] IP_ADDRESS [{tcp|udp}[/[PORT|PORT-PORT],...]]...
-```
-or
 ```sh
 sudo python3 -m portscaner [OPTIONS] IP_ADDRESS [{tcp|udp}[/[PORT|PORT-PORT],...]]...
 ```
