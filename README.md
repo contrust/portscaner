@@ -75,6 +75,15 @@ UDP 53 DNS
 UDP 443 - 
 ```
 
+### UDP SNTP example
+```sh
+sudo python3.10 -m portscaner -g -j 100 --timeout 0.5 ntp1.net.berkeley.edu udp/1-1000
+```
+
+```sh
+UDP 123 SNTP 
+```
+
 
 ## Author
 
