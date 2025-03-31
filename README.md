@@ -7,7 +7,7 @@ The scapy module requires root privileges to bypass the OS's standard networking
 ## Install
 
 ```sh
-sudo pip install .
+sudo pip3 install .
 ```
 
 ## Usage
