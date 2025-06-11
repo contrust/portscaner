@@ -5,6 +5,16 @@ from portscaner.application_protocols import ApplicationProtocols
 
 def get_application_protocol_by_response(request: bytes, response: bytes) \
         -> Optional[ApplicationProtocols]:
+    """
+    Identify the application protocol by the response.
+
+    Args:
+        request (bytes): The request to send to the port.
+        response (bytes): The response from the port.
+
+    Returns:
+        Optional[ApplicationProtocols]: The application protocol.
+    """
     if response.startswith(b'HTTP'):
         return ApplicationProtocols.HTTP
     elif b'\x50\x74' in response:

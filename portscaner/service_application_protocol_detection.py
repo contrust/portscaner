@@ -15,18 +15,27 @@ def get_service_application_protocol(domain: str,
                                      transport_protocol: TransportProtocols,
                                      timeout: float) -> \
         Optional[ApplicationProtocols]:
+    """
+    Get the service application protocol by sending predefined probes to the port.
+
+    Args:
+        domain (str): The domain to send the probes to.
+        port (int): The port to send the probes to.
+        transport_protocol (TransportProtocols): The transport protocol to send the probes with.
+        timeout (float): The timeout for the probes.
+
+    Returns:
+        Optional[ApplicationProtocols]: The service application protocol.
+    """
     str_transport_protocol = transport_protocol.value
     for str_application_protocol in (APPLICATION_PROTOCOL_PROBES
                                      [str_transport_protocol]):
         for probe in (APPLICATION_PROTOCOL_PROBES[str_transport_protocol]
                       [str_application_protocol]):
-            try:
-                if str_transport_protocol == TransportProtocols.TCP.value:
-                    response = tcp_send_recv(domain, port, probe, timeout)
-                else:
-                    response = udp_send_recv(domain, port, probe, timeout)
-            except socket.error:
-                continue
+            if str_transport_protocol == TransportProtocols.TCP.value:
+                response = tcp_send_recv(domain, port, probe, timeout)
+            else:
+                response = udp_send_recv(domain, port, probe, timeout)
             application_protocol = \
                 get_application_protocol_by_response(probe, response)
             return application_protocol

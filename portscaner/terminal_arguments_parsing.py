@@ -6,7 +6,13 @@ from functools import partial
 from portscaner.transport_protocols import TransportProtocols
 
 
-def parse_terminal_arguments():
+def parse_terminal_arguments() -> argparse.Namespace:
+    """
+    Parse the terminal arguments.
+
+    Returns:
+        argparse.Namespace: The parsed arguments.
+    """
     parser = argparse.ArgumentParser(
         description="This program scans given port ranges "
                     "and prints which ports are opened. "
@@ -20,7 +26,6 @@ def parse_terminal_arguments():
         help='address for scanning')
     parser.add_argument(
         'ports',
-        nargs='*',
         type=_parse_ports,
         help="ports for scanning in format [{tcp|udp}[/[PORT|PORT-PORT],...]]"
     )
@@ -54,7 +59,16 @@ def parse_terminal_arguments():
     return parser.parse_args()
 
 
-def _string_ipv4_address(string):
+def _string_ipv4_address(string: str) -> str:
+    """
+    Check if the string is a valid ipv4 address.
+
+    Args:
+        string (str): The string to check.
+
+    Returns:
+        str: The string if it is a valid ipv4 address.
+    """
     try:
         ipaddress.IPv4Network(string)
         return string
@@ -62,7 +76,17 @@ def _string_ipv4_address(string):
         raise argparse.ArgumentTypeError(f"{string} is not an ipv4 address.")
 
 
-def _positive_number(string, number_type):
+def _positive_number(string: str, number_type: type) -> int:
+    """
+    Check if the string is a positive number.
+
+    Args:
+        string (str): The string to check.
+        number_type (type): The type of the number.
+
+    Returns:
+        int: The number if it is a positive number.
+    """
     try:
         number = number_type(string)
     except ValueError:
@@ -74,7 +98,21 @@ def _positive_number(string, number_type):
         raise argparse.ArgumentTypeError(f"{string} is not positive number.")
 
 
-def _parse_ports(string):
+def _parse_ports(string: str) -> list[tuple[int, TransportProtocols]]:
+    """
+    Parse the ports.
+
+    Args:
+        string (str): The string to parse.
+
+    Returns:
+        list[tuple[int, TransportProtocols]]: The ports and their protocols.
+    Examples:
+        'tcp/80' -> {(80, TransportProtocols.TCP)}
+        'udp/52,53-55' -> {(52, TransportProtocols.UDP), (53, TransportProtocols.UDP), (54, TransportProtocols.UDP), (55, TransportProtocols.UDP)}
+        'tcp/1-1024' -> {(1, TransportProtocols.TCP), (2, TransportProtocols.TCP), ..., (1024, TransportProtocols.TCP)}
+        'udp/1-1024' -> {(1, TransportProtocols.UDP), (2, TransportProtocols.UDP), ..., (1024, TransportProtocols.UDP)}
+    """
     split_string = string.split('/')
     protocol = split_string[0]
     if protocol not in {'tcp', 'udp'} or string.endswith('/'):
@@ -114,4 +152,4 @@ def _parse_ports(string):
                 raise argparse.ArgumentError
     else:
         raise argparse.ArgumentError
-    return ports
+    return list(ports)
