@@ -87,7 +87,7 @@ class PortScaner:
             p.join()
         pbar.close()
         number_of_open_ports = sum(1 for _, _, application_protocol, _ in results if application_protocol)
-        print(f"Number of open ports: {number_of_open_ports}/{len(self.ports)}")
+        print(f"\nNumber of open ports: {number_of_open_ports}/{len(self.ports)}")
         if number_of_open_ports == 0:
             return
         print()
