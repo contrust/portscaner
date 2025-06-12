@@ -1,7 +1,7 @@
 import multiprocessing
 from time import perf_counter as pc
-
 from scapy.layers.inet import TCP
+from tqdm import tqdm
 
 from portscaner.application_protocols import ApplicationProtocols
 from portscaner.service_application_protocol_detection import \
@@ -35,7 +35,16 @@ class PortScaner:
         self.ports = ports
         self.results = {}
 
-    def scan(self, port: int, transport_protocol: TransportProtocols):
+    def scan_port(self, port: int, transport_protocol: TransportProtocols) -> tuple[int, TransportProtocols, ApplicationProtocols, float]:
+        """
+        Scan a single port and return the result.
+        """
+        start_time = pc()
+        application_protocol = self._scan_port(port, transport_protocol)
+        end_time = pc()
+        return port, transport_protocol, application_protocol, end_time - start_time
+
+    def _scan_port(self, port: int, transport_protocol: TransportProtocols) -> ApplicationProtocols | None:
         """
         Scan a single port and return the result.
 
@@ -43,32 +52,48 @@ class PortScaner:
             port (tuple[int, TransportProtocols]): The port and its transport protocol to scan.
 
         Returns:
-            None
+            ApplicationProtocols | None: The application protocol if the port is open, None otherwise.
         """
-        execution_time = 0
         if transport_protocol.value == TransportProtocols.TCP.value:
-            start_time = pc()
             ack_packet = tcp_send_syn_and_recv_ack(self.domain, port,
                                                    self.timeout)
-            end_time = pc()
-            execution_time = end_time - start_time
             tcp_send_rst(self.domain, port, self.timeout) # RST - Reset, close connection
             if not ack_packet or not ack_packet.haslayer(TCP) or \
                     ack_packet.getlayer(TCP).flags != "SA": # SA - SYN-ACK, if not, port is no longer open
-                return
+                return None
         application_protocol = get_service_application_protocol(self.domain, port,
                                                                 transport_protocol,
                                                                 self.timeout)
-        if application_protocol:
-            self._print_formatted_result(port, transport_protocol,
-                                         application_protocol, execution_time)
+        return application_protocol
 
     def scan_all(self):
         """
         Scan all ports and print the results to the console.
         """
-        with multiprocessing.Pool(self.max_threads) as pool:
-            pool.starmap(self.scan, self.ports)
+        pbar = tqdm(total=len(self.ports), desc="Scanning ports", unit="ports")
+        lock = multiprocessing.Lock()
+        results = []
+        def callback(result: tuple[int, TransportProtocols, ApplicationProtocols, float]) -> None:
+            with lock:
+                results.append(result)
+                pbar.update(1)
+                pbar.refresh()
+        with multiprocessing.Pool(processes=self.max_threads) as p:
+            start_time = pc()
+            for port, transport_protocol in self.ports:
+                p.apply_async(self.scan_port, (port, transport_protocol),
+                              callback=callback)
+            p.close()
+            p.join()
+        pbar.close()
+        number_of_open_ports = sum(1 for _, _, application_protocol, _ in results if application_protocol)
+        print(f"Number of open ports: {number_of_open_ports}/{len(self.ports)}")
+        if number_of_open_ports == 0:
+            return
+        print()
+        for port, transport_protocol, application_protocol, execution_time in results:
+            if application_protocol:
+                self._print_formatted_result(port, transport_protocol, application_protocol, execution_time)
 
     def _print_formatted_result(self, port: int,
                                 transport_protocol: TransportProtocols,
