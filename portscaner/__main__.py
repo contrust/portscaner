@@ -1,7 +1,6 @@
 import signal
 import socket
 from portscaner.scaner import PortScaner
-from portscaner.transport_protocols import TransportProtocols
 from portscaner.terminal_arguments_parsing import parse_terminal_arguments
 
 
