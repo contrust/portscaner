@@ -39,7 +39,7 @@ def tcp_send_rst(domain: str, port: int, timeout: float) -> Packet:
 
 
 def tcp_send_recv(domain: str, port: int,
-                  request: bytes, timeout: float) -> bytes:
+                  request: bytes, timeout: float) -> bytes | None:
     """
     Send a request to the domain and port and receive a TCP response.
 
@@ -64,7 +64,7 @@ def tcp_send_recv(domain: str, port: int,
 
 
 def udp_send_recv(domain: str, port: int,
-                  request: bytes, timeout: float) -> bytes:
+                  request: bytes, timeout: float) -> bytes | None:
     """
     Send a request to the domain and port and receive a UDP response.
 
