@@ -28,6 +28,7 @@ def get_service_application_protocol(domain: str,
         Optional[ApplicationProtocols]: The service application protocol.
     """
     str_transport_protocol = transport_protocol.value
+    application_protocol = None 
     for str_application_protocol in (APPLICATION_PROTOCOL_PROBES
                                      [str_transport_protocol]):
         for probe in (APPLICATION_PROTOCOL_PROBES[str_transport_protocol]
@@ -36,7 +37,10 @@ def get_service_application_protocol(domain: str,
                 response = tcp_send_recv(domain, port, probe, timeout)
             else:
                 response = udp_send_recv(domain, port, probe, timeout)
+            if response is None:
+                continue
             application_protocol = \
                 get_application_protocol_by_response(probe, response)
-            return application_protocol
-    return None
+            if application_protocol != ApplicationProtocols.UNKNOWN:
+                return application_protocol
+    return application_protocol
