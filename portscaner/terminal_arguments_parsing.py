@@ -107,6 +107,7 @@ def _parse_ports(string: str) -> list[tuple[int, TransportProtocols]]:
 
     Returns:
         list[tuple[int, TransportProtocols]]: The ports and their protocols.
+
     Examples:
         'tcp/80' -> {(80, TransportProtocols.TCP)}
         'udp/52,53-55' -> {(52, TransportProtocols.UDP), (53, TransportProtocols.UDP), (54, TransportProtocols.UDP), (55, TransportProtocols.UDP)}
