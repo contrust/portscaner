@@ -79,7 +79,6 @@ class PortScaner:
                 pbar.update(1)
                 pbar.refresh()
         with multiprocessing.Pool(processes=self.max_threads) as p:
-            start_time = pc()
             for port, transport_protocol in self.ports:
                 p.apply_async(self.scan_port, (port, transport_protocol),
                               callback=callback)
