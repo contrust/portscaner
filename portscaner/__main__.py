@@ -1,3 +1,4 @@
+import signal
 import socket
 from portscaner.scaner import PortScaner
 from portscaner.transport_protocols import TransportProtocols
@@ -8,6 +9,9 @@ def main():
     """
     Main function of the portscaner.
     """
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    signal.signal(signal.SIGTERM, signal.SIG_DFL)
+    signal.signal(signal.SIGQUIT, signal.SIG_DFL)
     args_dict = parse_terminal_arguments()
     domain = args_dict.address
     timeout = args_dict.timeout
