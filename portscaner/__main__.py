@@ -18,9 +18,7 @@ def main():
     max_threads = args_dict.num_threads
     ports = args_dict.ports
     verbose = args_dict.verbose
-    show_app_protocols = args_dict.guess
-    scaner = PortScaner(domain, timeout, max_threads, ports, verbose,
-                        show_app_protocols)
+    scaner = PortScaner(domain, timeout, max_threads, ports, verbose)
     try:
         scaner.scan_all()
     except PermissionError:

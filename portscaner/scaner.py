@@ -17,8 +17,7 @@ class PortScaner:
     """
     def __init__(self, domain: str, timeout: float, max_threads: int,
                  ports: set[tuple[int, TransportProtocols]],
-                 verbose: bool = True,
-                 show_app_protocols: bool = True):
+                 verbose: bool = True):
         """
         Initialize the PortScaner class.
 
@@ -28,17 +27,15 @@ class PortScaner:
             max_threads (int): The maximum number of threads to use.
             ports (set[tuple[int, TransportProtocols]]): The ports to scan.
             verbose (bool): Whether to print verbose output.
-            show_app_protocols (bool): Whether to show application protocols.
         """
         self.domain = domain
         self.max_threads = max_threads
         self.timeout = timeout
         self.verbose = verbose
-        self.show_app_protocols = show_app_protocols
         self.ports = ports
         self.results = {}
 
-    def scan(self, port: int, transport_protocol: TransportProtocols) -> None:
+    def scan(self, port: int, transport_protocol: TransportProtocols):
         """
         Scan a single port and return the result.
 
@@ -62,19 +59,13 @@ class PortScaner:
         application_protocol = get_service_application_protocol(self.domain, port,
                                                                 transport_protocol,
                                                                 self.timeout)
-        if transport_protocol == TransportProtocols.TCP and \
-                not application_protocol:
-            application_protocol = ApplicationProtocols.UNKNOWN
         if application_protocol:
             self._print_formatted_result(port, transport_protocol,
                                          application_protocol, execution_time)
 
-    def scan_all(self) -> None:
+    def scan_all(self):
         """
         Scan all ports and print the results to the console.
-
-        Returns:
-            None
         """
         with multiprocessing.Pool(self.max_threads) as pool:
             pool.starmap(self.scan, self.ports)
@@ -82,7 +73,7 @@ class PortScaner:
     def _print_formatted_result(self, port: int,
                                 transport_protocol: TransportProtocols,
                                 application_protocol: ApplicationProtocols,
-                                execution_time: float) -> None:
+                                execution_time: float):
         """
         Print the port information in a formatted way to the console.
 
@@ -91,24 +82,12 @@ class PortScaner:
             transport_protocol (TransportProtocols): The transport protocol to use.
             application_protocol (ApplicationProtocols): The application protocol to use.
             execution_time (float): The execution time of the scan.
-
-        Returns:
-            None
         """
         str_time_in_milliseconds = f'{int(execution_time * 1000)},ms'
-        str_application_protocol = application_protocol.value \
-        if application_protocol.value != \
-            application_protocol.UNKNOWN.value else '-'
-        if self.show_app_protocols and self.verbose and \
-                transport_protocol == TransportProtocols.TCP:
+        str_application_protocol = application_protocol.value
+        if self.verbose:
             print(("{:<1} " * 4).format(transport_protocol.value, port,
                                         str_time_in_milliseconds,
-                                        str_application_protocol))
-        elif self.verbose and transport_protocol == TransportProtocols.TCP:
-            print(("{:<1} " * 3).format(transport_protocol.value, port,
-                                        str_time_in_milliseconds))
-        elif self.show_app_protocols:
-            print(("{:<1} " * 3).format(transport_protocol.value, port,
                                         str_application_protocol))
         else:
             print(("{:<1} " * 2).format(transport_protocol.value, port))
