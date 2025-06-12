@@ -45,12 +45,6 @@ def parse_terminal_arguments() -> argparse.Namespace:
         help='response timeout in seconds, 1 seconds by default'
     )
     parser.add_argument(
-        '-g',
-        '--guess',
-        action='store_true',
-        help='show application protocols of services on ports'
-    )
-    parser.add_argument(
         '-v',
         '--verbose',
         action='store_true',
